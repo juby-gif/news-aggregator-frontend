@@ -15,9 +15,11 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s ease;
   opacity: 1;
-  max-width: 400px; /* Adjust the maximum width as needed */
+  max-width: 400px;
+  /* Adjust the maximum width as needed */
   width: 100%;
-  margin: 0 auto; /* Center the form horizontally */
+  margin: 0 auto;
+  /* Center the form horizontally */
 }
 
 /* Add media query for mobile devices */
