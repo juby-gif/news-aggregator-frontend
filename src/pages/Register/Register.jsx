@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { 
-  API_ENDPOINTS,
-  useApiService
-} from '../../utils';
+import { API_ENDPOINTS, useApiService } from '../../utils';
 import { UserContext } from '../../context';
-
+import { Card, Button } from '../../components';
+import './Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -53,24 +52,39 @@ const Register = () => {
     setLoading(false);
   };
 
-  const isFormValid = formData.name && formData.email && formData.password && formData.confirmPassword && formData.password === formData.confirmPassword;
+  const isFormValid =
+    formData.name &&
+    formData.email &&
+    formData.password &&
+    formData.confirmPassword &&
+    formData.password === formData.confirmPassword;
 
   return (
-    <div>
-      <h2>Register</h2>
-      {error && <div className="error-message">{error}</div>}
-      <Input label="Name" name="name" value={formData.name} onChange={handleInputChange} />
-      <Input label="Email" name="email" value={formData.email} onChange={handleInputChange} />
-      <PasswordInput value={formData.password} onChange={handleInputChange} />
-      <ConfirmPasswordInput value={formData.confirmPassword} onChange={handleInputChange} password={formData.password} />
-      <RegisterButton loading={loading} isFormValid={isFormValid} onClick={handleRegister} />
+    <div className="register">
+      <Card
+        className="register-form"
+        title="Register"
+        subtitle={error && <div className="error-message">{error}</div>}
+        body={
+          <CardBody
+            handleInputChange={handleInputChange}
+            formData={formData}
+            loading={loading}
+            isFormValid={isFormValid}
+            error={error}
+            handleRegister={handleRegister}
+          />
+        }
+        resizable={true}
+      />
+      
     </div>
   );
 };
 
 const Input = ({ label, name, value, onChange }) => {
   return (
-    <div>
+    <div className="form-field">
       <label htmlFor={name}>{label}:</label>
       <input type="text" id={name} name={name} value={value} onChange={onChange} />
     </div>
@@ -98,10 +112,10 @@ const PasswordValidationRules = ({ password }) => {
   const isPasswordValid = passwordValidations.every((validation) => validation.rule.test(password));
 
   return (
-    <div>
+    <div className="validation-rule">
       {passwordValidations.map((validation, index) => (
-        <p key={index} style={{ color: validation.rule.test(password) ? 'green' : 'red' }}>
-          {validation.rule.test(password) ? '✔' : '✘'} {validation.description}
+        <p key={index} className={validation.rule.test(password) ? 'valid' : ''}>
+          {validation.description}
         </p>
       ))}
       {!isPasswordValid && <p style={{ color: 'red' }}>Password does not meet all the requirements</p>}
@@ -116,7 +130,11 @@ const ConfirmPasswordInput = ({ value, onChange, password }) => {
     <div>
       <label htmlFor="confirmPassword">Confirm Password:</label>
       <input type="password" id="confirmPassword" name="confirmPassword" value={value} onChange={onChange} />
-      <span style={{ color: isMatch ? 'green' : 'red' }}>{isMatch ? '✔' : '✘'} Passwords match</span>
+      {value && password && (
+        <span className={`validation-rule ${isMatch ? 'valid' : ''}`}>
+          {isMatch ? '✔' : '✘'} Passwords match
+        </span>
+      )}
     </div>
   );
 };
@@ -129,9 +147,23 @@ const RegisterButton = ({ isFormValid, onClick, loading }) => {
   };
 
   return (
-    <button type="submit" onClick={handleRegisterClick} disabled={!isFormValid} className={loading ? 'loading' : ''}>
-      {loading ? 'Registering...' : 'Register'}
-    </button>
+    <Button type="submit" onClick={handleRegisterClick} disabled={!isFormValid} className={loading ? 'loading' : ''} text={loading ? 'Registering...' : 'Register'}>
+    </Button>
+  );
+};
+
+const CardBody = ({ handleInputChange, formData, loading, isFormValid, error, handleRegister }) => {
+  return (
+    <div>
+      <Input label="Name" name="name" value={formData.name} onChange={handleInputChange} />
+      <Input label="Email" name="email" value={formData.email} onChange={handleInputChange} />
+      <PasswordInput value={formData.password} onChange={handleInputChange} />
+      <ConfirmPasswordInput value={formData.confirmPassword} onChange={handleInputChange} password={formData.password} />
+      <RegisterButton loading={loading} isFormValid={isFormValid} onClick={handleRegister} />
+      <div className="login-link">
+        <Link to="/login">Already have an account? Login</Link>
+      </div>
+    </div>
   );
 };
 
