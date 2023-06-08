@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import { routes } from "./utils";
 import { useContext } from "react";
 import { UserContext } from "./context";
+import './App.css';
 
 /**
  * App component responsible for setting up routing in the application.

@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 // Create the user context
 const UserContext = createContext();
@@ -7,6 +7,7 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   // State for user and login status
   const [user, setUser] = useState(null);
+  const [articles, setArticles] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Function to handle user login
@@ -19,12 +20,14 @@ const UserProvider = ({ children }) => {
     };
     updateUser(updatedUser);
     setIsLoggedIn(true);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
   // Function to handle user logout
   const logout = () => {
     updateUser(null);
     setIsLoggedIn(false);
+    localStorage.removeItem('user');
   };
 
   // Function to update user preferences
@@ -37,13 +40,29 @@ const UserProvider = ({ children }) => {
     setUser(updatedUser);
   };
 
+  // Function to update the article state
+  const updateArticles = (articles) => {
+    setArticles(articles);
+  };
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   // Create the context value
   const contextValue = {
     user,
+    articles,
     isLoggedIn,
     login,
     logout,
     updateUserPreferences,
+    updateArticles,
   };
 
   // Render the user provider with the context value
