@@ -10,4 +10,13 @@ const API_ENDPOINTS = {
   // Add more endpoints as needed
 };
 
-export default API_ENDPOINTS;
+/**
+ * Constants for the News Aggregator application
+ */
+const CONSTANTS = {
+  NEWS_API: 'newsapi',
+  THE_GUARDIAN: 'theguardian',
+  THE_NEW_YORK_TIMES: 'nytimes',
+};
+
+export { API_ENDPOINTS, CONSTANTS };
