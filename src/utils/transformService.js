@@ -50,10 +50,11 @@ export function transformArticles(response) {
         webUrl, 
         webTitle: title, 
         webPublicationDate:date, 
+        fields: { thumbnail:img },
         // API doesn't support author
         // author 
       } = article;
-      return { id, category, redirectLink:webUrl, source:CONSTANTS.THE_GUARDIAN, date, title };
+      return { id, category, img, redirectLink:webUrl, source:CONSTANTS.THE_GUARDIAN, date, title };
     });
   }
   
